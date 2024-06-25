@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author 25290
@@ -37,7 +36,7 @@ public interface IUserDal extends JpaRepository<User, String> {
     @Transactional(rollbackFor = Exception.class)
     @Modifying
     @Query("DELETE FROM User u WHERE u.id = :id")
-    void deleteById(@Param("id") UUID id);
+    void deleteById(@Param("id") String id);
 
     /**
      * 修改密码
@@ -48,18 +47,18 @@ public interface IUserDal extends JpaRepository<User, String> {
     @Transactional(rollbackFor = Exception.class)
     @Modifying
     @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
-    void updatePasswordById(@Param("id") UUID id, @Param("password") String password);
+    void updatePasswordById(@Param("id") String id, @Param("password") String password);
 
     /**
      * 修改个人信息
      *
-     * @param id       id
+     * @param id          id
      * @param description 描述
      */
     @Transactional(rollbackFor = Exception.class)
     @Modifying
     @Query("UPDATE User u SET u.description = :description WHERE u.id = :id")
-    void updateDescribeById(@Param("id") UUID id, @Param("description") String description);
+    void updateDescribeById(@Param("id") String id, @Param("description") String description);
 
 
     /**
@@ -68,7 +67,7 @@ public interface IUserDal extends JpaRepository<User, String> {
      * @param id id
      * @return 返回用户列表
      */
-    Optional<User> findById(UUID id);
+    Optional<User> findById(String id);
 
     /**
      * 根据姓名查找

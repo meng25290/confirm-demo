@@ -6,8 +6,6 @@ import com.example.confirmdemo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 /**
  * @author 25290
  */
@@ -28,22 +26,22 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteById")
-    public Response deleteById(@RequestParam UUID id) {
+    public Response deleteById(@RequestParam String id) {
         return userDal.deleteById(id);
     }
 
     @PostMapping("/updateDescribeById")
-    public Response addUser(@RequestParam UUID id,String description) {
+    public Response addUser(@RequestParam String id, String description) {
         return userDal.updateDescribeById(id, description);
     }
 
     @PostMapping("/updatePasswordById")
-    public Response updatePasswordById(@RequestParam UUID id, @RequestParam String password) {
+    public Response updatePasswordById(@RequestParam String id, @RequestParam String password) {
         return userDal.updatePasswordById(id, password);
     }
 
     @GetMapping("/findById")
-    public Response findById(@RequestParam UUID id) {
+    public Response findById(@RequestParam String id) {
         return userDal.findById(id);
     }
 
