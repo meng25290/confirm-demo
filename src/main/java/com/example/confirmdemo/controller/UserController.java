@@ -1,9 +1,9 @@
 package com.example.confirmdemo.controller;
 
 import com.example.confirmdemo.dal.UserDal;
-import com.example.confirmdemo.init.Response;
 import com.example.confirmdemo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -21,37 +21,59 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public Response addUser(@RequestBody User user) {
-        return userDal.saveUser(user);
+    public ResponseEntity<?> addUser(@RequestBody User user) {
+        try {
+            userDal.saveUser(user);
+            return ResponseEntity.ok().body("删除成功");
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/deleteById")
-    public Response deleteById(@RequestParam String id) {
-        return userDal.deleteById(id);
+    public ResponseEntity<?> deleteById(@RequestParam String id) {
+        if (userDal.deleteById(id)) {
+            return ResponseEntity.ok().body("删除成功");
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/updateDescribeById")
-    public Response addUser(@RequestParam String id, String description) {
-        return userDal.updateDescribeById(id, description);
+    public ResponseEntity<?> addUser(@RequestParam String id, String description) {
+        if (userDal.updateDescribeById(id, description)) {
+            return ResponseEntity.ok().body("更新成功");
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/updatePasswordById")
-    public Response updatePasswordById(@RequestParam String id, @RequestParam String password) {
-        return userDal.updatePasswordById(id, password);
+    public ResponseEntity<?> updatePasswordById(@RequestParam String id, @RequestParam String password) {
+        if (userDal.updatePasswordById(id, password)) {
+            return ResponseEntity.ok().body("更新成功");
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/findById")
-    public Response findById(@RequestParam String id) {
-        return userDal.findById(id);
+    public ResponseEntity<?> findById(@RequestParam String id) {
+        User user = userDal.findById(id);
+        if (user != null) {
+            return ResponseEntity.ok().body(user);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/findByUsername")
-    public Response findByUsername(@RequestParam String username) {
-        return userDal.findByUsername(username);
+    public ResponseEntity<?> findByUsername(@RequestParam String username) {
+        User user = userDal.findByUsername(username);
+        if (user != null) {
+            return ResponseEntity.ok().body(user);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/findAll")
-    public Response findAll() {
-        return userDal.findAll();
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok().body(userDal.findAll());
     }
 }

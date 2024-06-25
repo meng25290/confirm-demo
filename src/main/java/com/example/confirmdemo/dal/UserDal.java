@@ -1,14 +1,12 @@
 package com.example.confirmdemo.dal;
 
 import com.example.confirmdemo.idal.IUserDal;
-import com.example.confirmdemo.init.Response;
 import com.example.confirmdemo.model.User;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * @author 25290
@@ -16,80 +14,56 @@ import java.util.Optional;
 @Service
 public class UserDal {
 
-    private final IUserDal userDal;
+    private final IUserDal iUserDal;
 
     @Autowired
     public UserDal(IUserDal userDal) {
-        this.userDal = userDal;
+        this.iUserDal = userDal;
     }
 
-    public Response saveUser(User u) {
+    public void saveUser(User u) {
         if (u.getUsername().isEmpty() || u.getPassword().isEmpty()) {
-            return new Response(400, "请不要留空用户名或密码", null);
+            throw new NullPointerException();
         }
         User user = new User(null, u.getUsername(), u.getPassword(), u.getDescription());
-
-        try {
-            userDal.save(user);
-            return new Response(204, "新增成功", null);
-        } catch (Exception e) {
-            return new Response(500, "新增失败，原因:" + e, null);
-        }
-
+        iUserDal.save(user);
     }
 
-    public Response deleteById(String id) {
-        try {
-            userDal.deleteById(id);
-            return new Response(204, "删除成功", null);
-        } catch (EmptyResultDataAccessException e) {
-            return new Response(404, "删除失败，因无该条数据", null);
-        } catch (Exception e) {
-            return new Response(500, "删除失败，原因:" + e, null);
+    public boolean deleteById(String id) {
+        if (iUserDal.existsById(id)) {
+            iUserDal.deleteById(id);
+            return true;
         }
+        return false;
     }
 
-    public Response updateDescribeById(String id, String describe) {
+    public boolean updateDescribeById(String id, String description) {
         try {
-            userDal.updateDescribeById(id, describe);
-            return new Response(204, "更新成功", null);
+            iUserDal.updateDescribeById(id, description);
+            return true;
         } catch (EntityNotFoundException e) {
-            return new Response(404, "更新失败，因无该条数据", null);
-        } catch (Exception e) {
-            return new Response(500, "更新失败，原因:" + e, null);
+            return false;
         }
     }
 
-    public Response updatePasswordById(String id, String password) {
+    public boolean updatePasswordById(String id, String password) {
         try {
-            userDal.updatePasswordById(id, password);
-            return new Response(204, "更新成功", null);
+            iUserDal.updatePasswordById(id, password);
+            return true;
         } catch (EntityNotFoundException e) {
-            return new Response(404, "更新失败，因无该条数据", null);
-        } catch (Exception e) {
-            return new Response(500, "更新失败，原因:" + e, null);
+            return false;
         }
     }
 
-    public Response findById(String id) {
-        Optional<User> userOptional = userDal.findById(id);
-        if (userOptional.isPresent()) {
-            return new Response(200, "查询成功", userOptional.get());
-        } else {
-            return new Response(404, "查询失败，不包含该数据", null);
-        }
+    public User findById(String id) {
+        return iUserDal.findById(id).orElse(null);
     }
 
-    public Response findByUsername(String username) {
-        User user = userDal.findByUsername(username);
-        if (user != null) {
-            return new Response(200, "查询成功", user);
-        } else {
-            return new Response(404, "查询失败，不包含该数据", null);
-        }
+    public User findByUsername(String username) {
+        return iUserDal.findByUsername(username);
     }
 
-    public Response findAll() {
-        return new Response(200, "查询成功", userDal.findAll());
+    public List<User> findAll() {
+        return iUserDal.findAll();
     }
 }

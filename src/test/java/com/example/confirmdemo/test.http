@@ -3,12 +3,12 @@ POST http://localhost:8085/api/v1/user/addUser
 Content-Type: application/json
 
 {
-  "username": "test123",
+  "username": "123",
   "password": "123123"
 }
 
 ### 删除用户
-DELETE http://localhost:8085/api/v1/user/deleteById?id=4564f1d0-803a-4edd-b114-1fb9c7029670
+DELETE http://localhost:8085/api/v1/user/deleteById?id=1
 
 ### 更新用户描述
 POST http://localhost:8085/api/v1/user/updateDescribeById
@@ -26,8 +26,7 @@ id=0047f326-a461-4571-9cbd-76d6c92f047c&password=111111
 GET http://localhost:8085/api/v1/user/findById?id=0047f326-a461-4571-9cbd-76d6c92f047c
 
 ### 姓名查找
-GET http://localhost:8085/api/v1/user/findByUsername?username=test1
+GET http://localhost:8085/api/v1/user/findByUsername?username=test11
 
 ### 获取全部
 GET http://localhost:8085/api/v1/user/findAll
-

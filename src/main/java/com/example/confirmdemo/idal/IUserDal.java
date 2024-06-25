@@ -39,6 +39,15 @@ public interface IUserDal extends JpaRepository<User, String> {
     void deleteById(@Param("id") String id);
 
     /**
+     * 验证用户是否存在
+     *
+     * @param id id
+     * @return boolean
+     */
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u WHERE u.id = :id")
+    boolean existsById(@Param("id") String id);
+
+    /**
      * 修改密码
      *
      * @param id       id
@@ -59,7 +68,6 @@ public interface IUserDal extends JpaRepository<User, String> {
     @Modifying
     @Query("UPDATE User u SET u.description = :description WHERE u.id = :id")
     void updateDescribeById(@Param("id") String id, @Param("description") String description);
-
 
     /**
      * 根据id查找
