@@ -1,0 +1,23 @@
+### 增加用户
+POST http://localhost:8085/api/v1/user/addUser
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "123"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+###
+GET http://localhost:8085/api/v1/user/findAll
+
